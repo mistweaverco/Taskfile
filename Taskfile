@@ -2,20 +2,27 @@
 
 function build {
         echo "This serves as an super evil example."
-        sleep 1
+        sleep 2
+        local foo=0
+        echo -ne "Doing stuff ..."
+        while [ $foo -lt 10 ]; do
+                sleep 1
+                echo -ne "."
+                ((foo++))
+        done
+        echo ""
 }
 
-function default {
-        build
+function tasks {
+        compgen -A function
 }
 
 function help {
         echo "$0 <task> <args>"
         echo "Tasks:"
-        compgen -A function | cat -n
+        tasks | cat -n
 }
 
-TIMEFORMAT="Task completed in %3lR"
 
-time ${@:-default}
+${@:-tasks}
 
