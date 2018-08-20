@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# This is just an example
 function build {
         echo "This serves as an super evil example."
         sleep 2
@@ -13,16 +14,24 @@ function build {
         echo ""
 }
 
-function tasks {
-        compgen -A function
-}
-
+# Another example, but it's always a good practice to have a help function
 function help {
         echo "$0 <task> <args>"
         echo "Tasks:"
         tasks | cat -n
 }
 
+# This task needs to left as it is
+# This is for external plugins and programs to query the available tasks
+function tasks {
+        compgen -A function
+}
 
-${@:-tasks}
+# This is a wrapper for what should be executed, when no args are passed to the
+# Taskfile
+function default {
+        tasks
+}
+
+${@:-default}
 
