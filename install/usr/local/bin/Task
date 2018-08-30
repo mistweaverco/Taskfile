@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [[ ! -f "./Taskfile" ]]; then
+        echo "No Taskfile found"
+        exit 2
+fi
+
+./Taskfile "$@"
+

@@ -1,0 +1,11 @@
+#/usr/bin/env bash
+
+_Task() {
+        local tasks=""
+        if [[ -f ./Taskfile ]]; then
+                tasks=$(./Taskfile tasks)
+        fi
+        COMPREPLY=($(compgen -W "$tasks" "${COMP_WORDS[1]}"))
+}
+
+complete -F _Task Task
