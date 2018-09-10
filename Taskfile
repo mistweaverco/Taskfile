@@ -24,7 +24,7 @@ function help {
 # This task needs to left as it is
 # This is for external plugins and programs to query the available tasks
 function tasks {
-        compgen -A function
+        compgen -A function | grep -v "^_"
 }
 
 # This is a wrapper for what should be executed, when no args are passed to the
