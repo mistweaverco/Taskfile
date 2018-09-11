@@ -1,17 +1,31 @@
 #!/bin/bash
 
+# Helper functions start with _ and are invisible to bash auto completion.
+function _get_random_number {
+        local min=$1
+        local max=$2
+        echo $(( ( RANDOM % $max )  + $min ))
+}
+
 # This is just an example
 function build {
-        echo "This serves as an super evil example."
-        sleep 2
-        local foo=0
-        echo -ne "Doing stuff ..."
-        while [ $foo -lt 10 ]; do
+        local rand=$(_get_random_number 1 10)
+        local i=0
+        echo
+        echo "Build $1"
+        while [ $i -lt $rand ]; do
                 sleep 1
-                echo -ne "."
-                ((foo++))
+                echo  " Computing $1 ..."
+                ((i++))
         done
-        echo ""
+        echo "Finished $1"
+        echo
+}
+
+# Parallelisation - run multiple tasks in parallel.
+function build-all {
+        build android & build iphone & build ipad & build web &
+        wait
 }
 
 # Another example, but it's always a good practice to have a help function
