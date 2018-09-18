@@ -1,0 +1,7 @@
+{
+        "deployment": {
+                "username": "webchef",
+                "hostname": "ssh.taskfile.sh",
+                "upload_dir": "/www/taskfile.sh/cdn/htdocs/latest/"
+        }
+}

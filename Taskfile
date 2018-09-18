@@ -13,6 +13,12 @@ function _get_random_number {
         echo $(( ( RANDOM % $max )  + $min ))
 }
 
+# Simple logger helper function
+function _logger {
+        local d=$(date --rfc-3339=ns)
+        echo -ne "$d\t$@\n"
+}
+
 # This is just an example
 function build {
         local rand=$(_get_random_number 1 10)
@@ -26,6 +32,42 @@ function build {
         done
         echo "Finished $1"
         echo
+}
+
+# Watching for changes and then rebuild automatically
+# Easy as pie!
+function watch {
+        local watchdir="./src/"
+        _logger "Watcher started"
+        inotifywait -m -r -e close_write --format '%w%f' "${watchdir}" | \
+        while read events; do
+                _logger "Build triggered"
+                Task build
+                _logger "Build finished"
+        done
+}
+
+## Deploy to a remove server using rsync is easy as fuck!
+function deploy {
+        local username="$(cat ./config.json | jq -r .deployment.username)"
+        local hostname="$(cat ./config.json | jq -r .deployment.hostname)"
+        local upload_dir="$(cat ./config.json | jq -r .deployment.upload_dir)"
+        rsync -av --no-o --no-g ./dist/ "$username"@"$hostname":"$upload_dir"
+}
+
+## Watch the src dir for changes and then auto-build and auto-deploy
+function auto-deploy {
+        local watchdir="./src/"
+        _logger "Auto-Deploy started"
+        inotifywait -m -r -e close_write --format '%w%f' "${watchdir}" | \
+        while read events; do
+                _logger "Build triggered"
+                Task build
+                _logger "Build finished"
+                _logger "Deployment triggered"
+                deploy
+                _logger "Deployment finished"
+        done
 }
 
 # Parallelisation - run multiple tasks in parallel.
