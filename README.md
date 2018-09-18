@@ -55,13 +55,13 @@ Task [taskname]
 ## List all available tasks
 
 ```bash
-./Taskfile tasks
+./Taskfile __show_tasks
 ```
 
 or with installed `Task` exectutable:
 
 ```bash
-Task tasks
+Task <tab><tab>
 ```
 
 ## Plugins
