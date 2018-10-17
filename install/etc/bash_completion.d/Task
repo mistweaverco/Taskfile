@@ -3,7 +3,7 @@
 _Task() {
         local tasks=""
         if [[ -f ./Taskfile ]]; then
-                tasks=$(./Taskfile tasks)
+                tasks=$(./Taskfile __show_tasks)
         fi
         COMPREPLY=($(compgen -W "$tasks" "${COMP_WORDS[1]}"))
 }
