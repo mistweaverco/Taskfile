@@ -12,10 +12,7 @@ function __command_exists {
 
 main() {
         if [[ $(__command_exists "sudo") -eq 0 ]]; then
-                sudo cp ./install/etc/bash_completion.d/Task /etc/bash_completion.d/
-                sudo cp ./install/usr/local/bin/Task /usr/local/bin/
-        else
-                if [[ $(whoami) == "root" ]]; then
+                if [[ "$EUID" -eq 0 ]]; then
                         cp ./install/etc/bash_completion.d/Task /etc/bash_completion.d/
                         cp ./install/usr/local/bin/Task /usr/local/bin/
                 else
@@ -23,7 +20,9 @@ main() {
                         echo "Task(file) can't be installed."
                         exit 1;
                 fi
-
+        else
+                sudo cp ./install/etc/bash_completion.d/Task /etc/bash_completion.d/
+                sudo cp ./install/usr/local/bin/Task /usr/local/bin/
         fi
         local bash_completion_path="/etc/bash_completion.d"
         source  "$bash_completion_path/Task"
