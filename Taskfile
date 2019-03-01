@@ -2,9 +2,12 @@
 
 # This task needs to left as it is
 # This is for external plugins and programs to query the available tasks
-function __show_tasks {
+function __show_tasks() {
         compgen -A function | grep -v "^_"
 }
+# This needs also be left as it is
+# It's used to check for function existence
+function __fn_exists() { test x"$(type -t "$1")" = xfunction; }
 
 # Helper functions start with _ and are invisible to bash auto completion.
 function _get_random_number {
@@ -106,5 +109,9 @@ function default {
         __show_tasks
 }
 
-"${@:-default}"
+if [[ -n $1 ]]; then
+        __fn_exists "$1" && "$@" || echo "Task \"$1\" does not exist." && exit 1;
+else
+        default
+fi
 
